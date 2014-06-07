@@ -81,18 +81,38 @@ random, math, etc.
 
 ### Python Expression Operators
 
+![pic](http://git.candylee.cn/doomdagger/learn-python/raw/master/Numbers-1.jpg "")
+
+> Difference in division between 2.6 & 3.0:
+* The X // Y floor division expression always truncates fractional remainders in both Python 2.X and 3.X. The X / Y expression performs true division in 3.X (retaining remainders) and classic division in 2.X (truncating for integers).
+
 ```python
+# Comparison operators may be chained:
+if x < y < z:
+    print("hello")
 
-# Generator function send protocol
-yield x
+# floor division in 3.0 & 2.6
+3 // 2    # 1
+3.0 // 2  # 1.0
 
-# Anonymous function generation
-lambda args: expression
+# true division in 3.0
+3 / 2     # 1.5 
+3.0 / 2   # 1.5
 
+# truncating for integers in 2.6
+3 / 2     # 1
+3.0 / 2   # 1.5
 
+# number type converting
+int(3.1415)    # 3
+float(3)       # 3.0
 ```
 
+> Caution in Python!
+* `'str' + 1      # error!`
+* Python does not convert across any other type boundaries automatically. Adding a string to an integer, for example,results in an error, unless you manually convert one or the other
 
 
-
+> Caution in Python 3.0:
+* In 3.X, nonnumeric mixed-type magnitude comparisons are never allowed and raise exceptions. Note that this applies to comparison operators such as > only; other operators like + do not allow mixed nonnumeric types in either 3.X or 2.X
 
