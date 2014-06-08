@@ -6,7 +6,7 @@ Lists and Dictionaries
 * Ordered collections of arbitrary objects
 * Accessed by offset
 * Variable-length, heterogeneous, and arbitrarily nestable
-* Of the category ¡°mutable sequence¡±
+* Of the category "mutable sequence"
 * **Arrays of object references**
 
 ### List Operations
@@ -24,4 +24,4 @@ Lists and Dictionaries
 | L1 + L2 | Concatenate, repeat |
 | L * 3 ||
 
-<img src="http://git.candylee.cn/doomdagger/learn-python/raw/master/res/ListsDictionaries-1.jpg" width="500">
+![pic](http://git.candylee.cn/doomdagger/learn-python/raw/master/res/ListsDictionaries-1.jpg "")
