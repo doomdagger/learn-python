@@ -5,7 +5,7 @@ Strings
 
 * In Python 3.X there are three string types: **str** is used for Unicode text (including ASCII), **bytes** is used for binary data (including encoded text), and **bytearray** is a mutable variant of bytes. Files work in two modes: text, which represents content
 as **str** and implements Unicode encodings, and **binary**, which deals in raw **bytes** and does no data translation.
-* In Python 2.X, **unicode** strings represent Unicode text, **str** strings handle both 8-bit text and binary data, and **bytearray** is available in 2.6 and later as a back-port from 3.X. Normal files¡¯ content is simply bytes represented as **str**, but a **codecs** module opens Unicode text files, handles encodings, and represents content as **unicode** objects.
+* In Python 2.X, **unicode** strings represent Unicode text, **str** strings handle both 8-bit text and binary data, and **bytearray** is available in 2.6 and later as a back-port from 3.X. Normal filesÂ¡Â¯ content is simply bytes represented as **str**, but a **codecs** module opens Unicode text files, handles encodings, and represents content as **unicode** objects.
 
 > Python has no distinct type for individual characters;
 instead, you just use one-character strings
@@ -69,9 +69,9 @@ myfile = open(r'C:\new\text.dat', 'w')
 
 > **Caution:**
 even a raw string cannot end in a single backslash, **because
-the backslash escapes the following quote character**¡ªyou still
+the backslash escapes the following quote character**Â¡Âªyou still
 must escape the surrounding quote character to embed it in the string.
-That is, **r"...\" is not a valid string literal**¡ªa raw string cannot end in
+That is, **r"...\" is not a valid string literal**Â¡Âªa raw string cannot end in
 an odd number of backslashes. If you need to end a raw string with a
 single backslash, you can use two and slice off the second (`r'1\nb\tc\\'[:-1]`), tack one on manually (r'1\nb\tc' + '\\'), or skip the raw
 string syntax and just double up the backslashes in a normal string ('1\
@@ -85,7 +85,7 @@ Triple-quoted strings are also commonly used for **documentation strings**, whic
 
 ## Strings in Action
 
-> **Caution:** Python doesn¡¯t allow you to mix numbers and strings in + expressions: `'abc'+9` raises an error instead of automatically converting 9 to a string.
+> **Caution:** Python doesnÂ¡Â¯t allow you to mix numbers and strings in + expressions: `'abc'+9` raises an error instead of automatically converting 9 to a string.
 
 ```python
 myjob = 'spam'
@@ -99,7 +99,7 @@ for s in myjob: print(s, end=' ')
 ```python
 S = 'a string'
 
-# it makes a full top-level copy of a sequence object¡ªan object with the same value, but a distinct piece of memory
+# it makes a full top-level copy of a sequence objectÂ¡Âªan object with the same value, but a distinct piece of memory
 S[:]
 
 S[0]
@@ -166,12 +166,12 @@ that you cannot change a string in place.
 
 # String Methods
 
-<img src="http://git.candylee.cn/doomdagger/learn-python/raw/master/res/String-3.jpg" width="500">
-<img src="http://git.candylee.cn/doomdagger/learn-python/raw/master/res/String-4.jpg" width="550">
+![pic](http://git.candylee.cn/doomdagger/learn-python/raw/master/res/String-3.jpg "")
+![pic](http://git.candylee.cn/doomdagger/learn-python/raw/master/res/String-4.jpg "")
 
 > **Performance Recommendation:**
 If you have to apply many changes to a very large string, you might be able to
-improve your script¡¯s performance by converting the string to an object that does support in-place changes.
+improve your scriptÂ¡Â¯s performance by converting the string to an object that does support in-place changes.
 
 ```python
 # use list
@@ -188,8 +188,8 @@ S = ''.join(L)    # S now: 'spaxxy'
 > **Also Notice:** Be sure to also see the earlier note about the mutable **bytearray** string available as of Python 3.0 and 2.6, described 
 fully in Chapter 37; because it may be changed in place, it offers an alternative to this list/join combination for some kinds of 8-bit text that must be changed often.
 
-**none of the string methods accepts patterns¡ªfor pattern-based text processing,
-you must use the Python `re` standard library module, an advanced tool. string methods may sometimes run more quickly than the re module¡¯s tools.**
+**none of the string methods accepts patternsÂ¡Âªfor pattern-based text processing,
+you must use the Python `re` standard library module, an advanced tool. string methods may sometimes run more quickly than the re moduleÂ¡Â¯s tools.**
 
 
 # String Formatting Expressions
