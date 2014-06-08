@@ -81,7 +81,7 @@ random, math, etc.
 
 ### Python Expression Operators
 
-![pic](http://git.candylee.cn/doomdagger/learn-python/raw/master/Numbers-1.jpg "")
+![pic](http://git.candylee.cn/doomdagger/learn-python/raw/master/res/Numbers-1.jpg "")
 
 > Difference in division between 2.6 & 3.0:
 * The X // Y floor division expression always truncates fractional remainders in both Python 2.X and 3.X. The X / Y expression performs true division in 3.X (retaining remainders) and classic division in 2.X (truncating for integers).
@@ -284,9 +284,102 @@ y = Fraction(4, 6)
 z = Fraction('.25')    # Fraction(1, 4)
 ```
 
-### Conversions and mixed types
+#### Conversions and mixed types
 ```python
 (2.5).as_integer_ratio()    # return a tuple: (5, 2)
 
+# one way
 Fraction(*(2.5).as_integer_ratio())
+
+# another
+Fraction.from_float(1.75)
+
+# convert back to float
+float(Fraction(1, 4))
+
+# mixtures
+
+Fraction(1, 3) + 2        # Fraction(7, 3)
+
+Fraction(1, 3) + 2.0      # 2.333333333335
+
+Fraction(1, 3) + Fraction(2, 1)    # Fraction(7, 3)
+
+```
+> Tips: Avoid Precision Loss
+* `Fraction(*(4.0 / 3).as_integer_ratio())` can result in `Fraction(6004799503160661, 4503599627370496)`
+* To overcome this condition, try this: `fraction_type_object = fraction_type_object.limit_denominator(10)`, the result above then will be `Fraction(4, 3)`
+
+### Set
+
+#### Basics
+```python
+# one way to initialize a set
+{1, 2, '3', 4}
+
+# another
+set([1, 2, '3', 4])
+
+```
+
+#### Operations
+```python
+x = {1, 2, 3, 4, 'a', 'b'}
+y = {1, 2, 3}
+
+2 in x
+
+x - y    # difference
+
+x | y    # union -> x.union(y)
+
+x & y    # intersection -> x.intersection(y)
+
+x ^ y    # symmetric difference -> (x | y) - (x & y)
+
+x > y    # is x a superset of y -> x.issuperset(y)
+
+x < y    # is x a subset of y -> x.issubset(y)
+
+```
+
+##### In-place operations
+```python
+x.add(3)
+
+x.update({0, 9})
+
+x.remove(1)
+```
+
+> Notion: Set literals in Python2.6 & Python 3.0
+```python
+# in 2.6
+set([1,2,3,4])
+# in 3.0
+{1, 2, 3, 4}
+```
+* But `{}` is still a dictionary in Python. Empty sets must be created with the set built-in `set()`
+
+> Notion: sets can only contain immutable (a.k.a. ¡°hashable¡±) object types. Hence, lists and dictionaries cannot be embedded in sets, but tuples can if you need to store compound values.
+
+### Booleans
+
+#### Nature
+
+Internally, the names True and False are instances of bool, which is in turn just a subclass (in the objectoriented sense) of the built-in integer type int. True and False behave exactly like the
+integers 1 and 0, except that they have customized printing logic¡ªthey print themselves as the words True and False, instead of the digits 1 and 0. bool accomplishes this by redefining str and repr string formats for its two objects.
+
+```python
+
+type(True)    # <class 'bool'>
+
+isinstance(True, int)    # True
+
+True == 1    # same value
+
+True is 1    # But different object
+
+True + 4     # 5
+
 ```
