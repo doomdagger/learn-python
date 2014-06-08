@@ -150,7 +150,8 @@ repr('42')  # "'42'"
 
 #### Character code conversions
 
-**Notion**: built-in **`ord`** function¡ªthis returns the actual binary value used to represent the corresponding character in memory. The **`chr`** function performs the inverse operation, taking an integer code and converting it to the corresponding character.
+**Notion**: 
+built-in `ord` function - this returns the actual binary value used to represent the corresponding character in memory. The **`chr`** function performs the inverse operation, taking an integer code and converting it to the corresponding character.
 ```python
 ord('s')    # take only a single character as parameter
 # 115
@@ -159,13 +160,38 @@ chr(115)
 ```
 
 ## Changing Strings
-+ Remember the term ¡°immutable sequence¡±? As we¡¯ve seen, the immutable part means
++ Remember the term "immutable sequence"? As we've seen, the immutable part means
 that you cannot change a string in place. 
 + Generating a new string object for each string change is not as inefficient as it may sound.
 
 # String Methods
 
-![pic](http://git.candylee.cn/doomdagger/learn-python/raw/master/res/String-3.jpg "")
+<img src="http://git.candylee.cn/doomdagger/learn-python/raw/master/res/String-3.jpg" width="500">
+<img src="http://git.candylee.cn/doomdagger/learn-python/raw/master/res/String-4.jpg" width="550">
+
+> **Performance Recommendation:**
+If you have to apply many changes to a very large string, you might be able to
+improve your script¡¯s performance by converting the string to an object that does support in-place changes.
+
+```python
+# use list
+S = 'spammy'
+
+L = list(S)
+
+L[3] = 'x'
+L[4] = 'x'
+
+S = ''.join(L)    # S now: 'spaxxy'
+```
+
+> **Also Notice:** Be sure to also see the earlier note about the mutable **bytearray** string available as of Python 3.0 and 2.6, described 
+fully in Chapter 37; because it may be changed in place, it offers an alternative to this list/join combination for some kinds of 8-bit text that must be changed often.
+
+**none of the string methods accepts patterns¡ªfor pattern-based text processing,
+you must use the Python `re` standard library module, an advanced tool. string methods may sometimes run more quickly than the re module¡¯s tools.**
 
 
-![pic](http://git.candylee.cn/doomdagger/learn-python/raw/master/res/String-4.jpg "")
+# String Formatting Expressions
+
+...
