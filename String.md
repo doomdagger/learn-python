@@ -188,10 +188,9 @@ S = ''.join(L)    # S now: 'spaxxy'
 > **Also Notice:** Be sure to also see the earlier note about the mutable **bytearray** string available as of Python 3.0 and 2.6, described 
 fully in Chapter 37; because it may be changed in place, it offers an alternative to this list/join combination for some kinds of 8-bit text that must be changed often.
 
-**none of the string methods accepts patterns¡ªfor pattern-based text processing,
-you must use the Python `re` standard library module, an advanced tool. string methods may sometimes run more quickly than the re module¡¯s tools.**
+**none of the string methods accepts patterns - for pattern-based text processing,
+you must use the Python `re` standard library module, an advanced tool. string methods may sometimes run more quickly than the re module's tools.**
 
 
 # String Formatting Expressions
 
-...
