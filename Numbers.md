@@ -81,7 +81,7 @@ random, math, etc.
 
 ### Python Expression Operators
 
-![pic](http://git.candylee.cn/doomdagger/learn-python/raw/master/res/Numbers-1.jpg "")
+![pic](https://raw.githubusercontent.com/doomdagger/learn-python/master/res/Numbers-1.jpg "")
 
 > Difference in division between 2.6 & 3.0:
 * The X // Y floor division expression always truncates fractional remainders in both Python 2.X and 3.X. The X / Y expression performs true division in 3.X (retaining remainders) and classic division in 2.X (truncating for integers).
@@ -361,14 +361,14 @@ set([1,2,3,4])
 ```
 * But `{}` is still a dictionary in Python. Empty sets must be created with the set built-in `set()`
 
-> Notion: sets can only contain immutable (a.k.a. ¡°hashable¡±) object types. Hence, lists and dictionaries cannot be embedded in sets, but tuples can if you need to store compound values.
+> Notion: sets can only contain immutable (a.k.a. Â¡Â°hashableÂ¡Â±) object types. Hence, lists and dictionaries cannot be embedded in sets, but tuples can if you need to store compound values.
 
 ### Booleans
 
 #### Nature
 
 Internally, the names True and False are instances of bool, which is in turn just a subclass (in the objectoriented sense) of the built-in integer type int. True and False behave exactly like the
-integers 1 and 0, except that they have customized printing logic¡ªthey print themselves as the words True and False, instead of the digits 1 and 0. bool accomplishes this by redefining str and repr string formats for its two objects.
+integers 1 and 0, except that they have customized printing logicÂ¡Âªthey print themselves as the words True and False, instead of the digits 1 and 0. bool accomplishes this by redefining str and repr string formats for its two objects.
 
 ```python
 
