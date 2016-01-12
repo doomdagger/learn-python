@@ -13,7 +13,7 @@ instead, you just use one-character strings
 
 # Common String literals and operations
 
-![pic](http://git.candylee.cn/doomdagger/learn-python/raw/master/res/String-1.jpg "")
+![pic](https://raw.githubusercontent.com/doomdagger/learn-python/master/res/String-1.jpg "")
 
 # String Literals
 
@@ -36,7 +36,7 @@ title = "Meaning " 'of' " Life"
 
 ## Escape Sequences Represent Special Bytes
 
-![pic](http://git.candylee.cn/doomdagger/learn-python/raw/master/res/String-2.jpg "")
+![pic](https://raw.githubusercontent.com/doomdagger/learn-python/master/res/String-2.jpg "")
 
 ```python
 '\xhh'        # Character with hex value hh (exactly 2 digits)
@@ -166,8 +166,8 @@ that you cannot change a string in place.
 
 # String Methods
 
-![pic](http://git.candylee.cn/doomdagger/learn-python/raw/master/res/String-3.jpg "")
-![pic](http://git.candylee.cn/doomdagger/learn-python/raw/master/res/String-4.jpg "")
+![pic](https://raw.githubusercontent.com/doomdagger/learn-python/master/res/String-3.jpg "")
+![pic](https://raw.githubusercontent.com/doomdagger/learn-python/master/res/String-4.jpg "")
 
 > **Performance Recommendation:**
 If you have to apply many changes to a very large string, you might be able to
