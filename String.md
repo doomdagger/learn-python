@@ -69,7 +69,7 @@ myfile = open(r'C:\new\text.dat', 'w')
 
 > **Caution:**
 even a raw string cannot end in a single backslash, **because
-the backslash escapes the following quote character**¡ªyou still
+the backslash escapes the following quote character**, you still
 must escape the surrounding quote character to embed it in the string.
 That is, **r"...\" is not a valid string literal**¡ªa raw string cannot end in
 an odd number of backslashes. If you need to end a raw string with a
@@ -121,7 +121,7 @@ slice expressions have support for an optional third index, used
 as a step (sometimes called a stride). The step is added to the index of each item extracted. The full-blown form of a slice is now **`X[I:J:K]`**
 
 > **Tips:**
-You can also use a negative stride to collect items in the opposite order. For example, the slicing expression `"hello"[::?1]` returns the new string `"olleh"`.
+You can also use a negative stride to collect items in the opposite order. For example, the slicing expression `"hello"[::-1]` returns the new string `"olleh"`.
 
 > **Caution:**
 With a negative stride, the meanings of the first two bounds are essentially reversed. That is, the slice `S[5:1:?1]` fetches the items from 2 to 5, in reverse order.
