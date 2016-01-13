@@ -16,21 +16,21 @@ a = 3
 """
 ```
 
-Each object also has two standard header fields: a type designator used to mark the type of the object, and a reference counter used to determine when it¡¯s OK to reclaim the object.
+Each object also has two standard header fields: **a type designator** used to mark the type of the object, and **a reference counter** used to determine when it's OK to reclaim the object.
 
 
 ## Types Live with Objects, Not Variables
 
-Names have no types; as stated earlier, types live with objects, not names. Objects, on the other hand, know what type they are¡ªeach object contains a header field that tags the object with its type.
+Names have no types; as stated earlier, types live with objects, not names. Objects, on the other hand, know what type they areÂ¡Âªeach object contains a header field that tags the object with its type.
 
 ## Objects Are Garbage-Collected
 
-**Caution cyclic reference:** Python¡¯s garbage collection is based mainly upon reference counters, as described here; however, it also has a component that detects and reclaims objects with cyclic references in time. This component can be disabled if you¡¯re sure
-that your code doesn¡¯t create cycles, but it is enabled by default.
+**Caution cyclic reference:** Python's garbage collection is based mainly upon reference counters, as described here; however, it also has a component that detects and reclaims objects with cyclic references in time. This component can be disabled if you're sure
+that your code doesn't create cycles, but it is enabled by default.
 
 ## Shared References
 
-**Definition:**This scenario in Python¡ªwith multiple names referencing the same object¡ªis usually called a shared reference (and sometimes just a shared object).
+**Definition:**This scenario in PythonÂ¡Âªwith multiple names referencing the same objectÂ¡Âªis usually called a shared reference (and sometimes just a shared object).
 
 > How to copy objects instead of making references:
 ```python
