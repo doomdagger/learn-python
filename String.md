@@ -192,5 +192,25 @@ fully in Chapter 37; because it may be changed in place, it offers an alternativ
 you must use the Python `re` standard library module, an advanced tool. string methods may sometimes run more quickly than the re module's tools.**
 
 
-# String Formatting Expressions
+# String Formatting
+
+1. String formatting expressions: The original technique, available since Python's inception.
+2. String formatting method calls: A newer technique added in Python 2.6 and 3.0.
+	
+	
+
+## Expressions
+
+Left of the % operator, provide a format string containing one or more embedded conversion targets, each of which starts with a % (e.g., %d).
+
+Right of the % operator, provide the object (or objects, embedded in a tuple).
+
+```python
+>>> 'That is %d %s bird!' % (1, 'dead')
+That is 1 dead bird!
+```
+### Advanced String Formatting Expressions
+
+![pic](https://raw.githubusercontent.com/doomdagger/learn-python/master/res/String-5.jpg "")
+
 
