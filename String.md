@@ -211,6 +211,107 @@ That is 1 dead bird!
 ```
 ### Advanced String Formatting Expressions
 
-![pic](https://raw.githubusercontent.com/doomdagger/learn-python/master/res/String-5.jpg "")
+#### The list of type codes
 
+![pic](https://raw.githubusercontent.com/doomdagger/learn-python/master/res/String-5.png "")
+
+> General Structure of Conversion Targets: **`%[(name)][flags][width][.precision]typecode`**
+
+* **name**: provide a dictionary key;
+* **flags**: left justification (-), numeric sign (+), zero fills (0);
+* **width**: total minimum field width;
+* **precision**: number of digits after a decimal point;
+
+Both *width* and *precision* can also be coded as a * to specify that they should take their values from the next item in the input values. 
+
+```python
+>>> "%0-10.*f" % (2, 10.1)
+'10.10     '
+>>> "%(good)-10.5d" % {'good': 10}
+'00010     '
+>>> food = 'spam'>>> qty = 10>>> vars(){'food': 'spam', 'qty': 10, ...plus built-in names set by Python... }
+>>> '%(qty)d more %(food)s' % vars() # Variables are keys in vars()
+'10 more spam'
+
+# use dict method to make dictionaries
+>>> template = '%(motto)s, %(pork)s and %(food)s'>>> template % dict(motto='spam', pork='ham', food='eggs')
+'spam, ham and eggs'
+```
+
+## Method Calls
+
+Unlike formatting expressions, formatting method calls are not closely based upon the C language’s “printf” model, and are sometimes more explicit in intent. 
+
+### The Basics
+
+```python
+# by position
+>>> template = '{0}, {1} and {2}'>>> template.format('spam', 'ham', 'eggs')
+'spam, ham and eggs'
+
+# by keyword
+>>> template = '{motto}, {pork} and {food}'>>> template.format(motto='spam', pork='ham', food='eggs')
+'spam, ham and eggs'
+
+# by both
+>>> template = '{motto}, {0} and {food}'>>> template.format('ham', motto='spam', food='eggs') 'spam, ham and eggs'
+
+# by relative position
+>>> template = '{}, {} and {}'>>> template.format('spam', 'ham', 'eggs')
+'spam, ham and eggs'
+```
+
+> General Structure of Conversion Targets: **`{fieldname!conversionflag:formatspec}`**
+
+* **fieldname**: a number or keyword naming an argument, followed by optional ".name" attribute or "[index]" component references.
+* **conversionflag**: can be **r**, **s**, or **a** to call **repr**, **str**, or **ascii** built-in functions on the value, respectively.
+* **formatspec**: specifies how the value should be presented, including details such as field width, alignment, padding, decimal precision, and so on, and ends with an optional data type code. `[[fill]align][sign][#][0][width][,][.precision][typecode]`
+
+* ***fill*** can be any fill character other than { or }; 
+* ***align*** may be <, >, =, or ^, for left alignment, right alignment, padding after a sign character, or centered alignment, respectively; 
+* ***sign*** may be +, −, or space; 
+* ***, (comma)*** option requests a comma for a thousands separator as of Python 2.7 and 3.1. 
+* ***width and precision*** are much as in the % expression
+> The **formatspec** may also contain nested {} format strings with field names only, to take values from the arguments list dynamically (much like the * in formatting expressions).
+
+```python
+>>> '{:{}10.2f}'.format(10.11, '^')
+'  10.11   '
+```
+
+## Comparison between Expressions and Method Calls
+
+* Has a handful of extra features not found in the % expression itself (though % can use alternatives)* Has more flexible value reference syntax (though it may be overkill, and % often has equivalents)* Can make substitution value references more explicit (though this is now optional)* Trades an operator for a more mnemonic method name (though this is also more verbose)* Does not allow different syntax for single and multiple values (though practice suggests this is trivial)* As a function can be used in places an expression cannot (though a one-line function renders this moot)
+
+### Extra features: Special-case “batteries” versus general techniques
+
+```python
+>>> '{0:b}'.format((2 ** 16) − 1)
+'1111111111111111'>>> '%b' % ((2 ** 16) − 1)ValueError: unsupported format character 'b'
+
+>>> '{:,d}'.format(999999999999) # New str.format method feature in 3.1/2.7 '999,999,999,999'>>> '%s' % commas(999999999999) # But % is same with simple 8-line function '999,999,999,999'
+```
+
+### Functions versus expressions: A minor convenience
+
+The final rationale for the format method—it’s a function that can appear where an expression cannot—requires more information about functions than we yet have at this point in the book, so we won’t dwell on it here. Suffice it to say that both the str.format method and the format built-in function can be passed to other functions, stored in other objects, and so on. An expression like % cannot directly, but this may be narrow-sighted—it’s trivial to wrap any expression in a one-line def or partial-line lambda once to turn it into a function with the same properties (though finding a reason to do so may be more challenging):
+
+```python
+def myformat(fmt, args): return fmt % args
+
+# Call your function object # Versus calling the built-inmyformat('%s %s', (88, 99))
+str.format('{} {}', 88, 99)# Your function is an object toootherfunction(myformat)
+```
+
+# General Type Categories
+
+## Types Share Operation Sets by Categories
+
+* **Numbers (integer, floating-point, decimal, fraction, others)**: Support addition, multiplication, etc.* **Sequences (strings, lists, tuples)**: Support indexing, slicing, concatenation, etc.
+* **Mappings (dictionaries)**: Support indexing by key, etc.
+
+## Mutable Types Can Be Changed in Place
+
+* **Immutables (numbers, strings, tuples, frozensets)**: None of the object types in the immutable category support in-place changes, though we can always run expressions to make new objects and assign their results to variables as needed.
+* **Mutables (lists, dictionaries, sets, bytearray)**: Conversely, the mutable types can always be changed in place with operations that do not create new objects. Although such objects can be copied, in-place changes support direct modification.
 
