@@ -142,6 +142,155 @@ L2 = copy.deepcopy(L)		# deep copy
 * Of the category “mutable mapping”
 * Tables of object references (hash tables)
 
+![dictionary](https://raw.githubusercontent.com/doomdagger/learn-python/master/res/ListsDictionaries-2.png)
+
+### More Dictionary Methods
+
+```python
+zip(L.keys(), L.values())		# list of tuples
+
+L.items()						# list of tuples
+
+list(table.items())
+# map comprehension[title for (title, year) in table.items() if year == '1975']
+```
+
+### Dictionary Usage Notes
+
+* Sequence operations don’t work: things like **concatenation** (an ordered joining) and **slicing** (extracting a contiguous section) simply don’t apply.
+* Assigning to new indexes adds entries
+* Keys need not always be strings: any immutable objects work just as well.
+
+### Tricks
+
+#### Using dictionaries to simulate flexible lists: Integer keys```python
+# Normal List
+L = []L[99] = 'spam'# Traceback (most recent call last):# File "<stdin>", line 1, in ?# IndexError: list assignment index out of range
+
+# Dictionary
+D = {}D[99] = 'spam'			# {99: 'spam'}
+```
+
+#### Using dictionaries for sparse data structures: Tuple keys
+
+for example, multidimensional arrays where only a few positions have values stored in them
+
+```python
+# Sparse data structure, multidimensional array
+Matrix = {}Matrix[(2, 3, 4)] = 88Matrix[(7, 8, 9)] = 99X = 2; Y = 3; Z = 4Matrix[(X, Y, Z)] 				# 88
+```
+
+> **Caution**: accessing an empty slot triggers a nonexistent key exception, as these slots are not physically stored. To avoiding missing-key errors, use a **try** statement to catch and recover from the exception explicitly, or simply use the dictionary **get** method shown earlier to provide a default for keys that do not exist.
+```python
+# use if and else
+if (2, 3, 6) in Matrix:
+	print(Matrix[(2, 3, 6)])
+else:
+	print(0)
+# use try statement
+try:
+	print(Matrix[(2, 3, 6)])
+except KeyError:
+	print(0)
+# use get method and provide default value
+Matrix.get((2, 3, 4), 0)
+```
+
+#### Other Ways to Make Dictionaries
+
+```python
+# spell out the entire dictionary ahead of time
+{'name': 'Bob', 'age': 40}
+# create the dictionary on the flyD = {}D['name'] = 'Bob' D['age'] = 40
+# use constructors to create dictionariesdict(name='Bob', age=40)dict([('name', 'Bob'), ('age', 40)])
+dict(zip(keyslist, valueslist))
+dict.fromkeys(keyslist, default_value)
+```
+
+In practice, dictionaries tend to be best for data with labeled components, as well as structures that can benefit from quick, direct lookups by name, instead of slower linear searches. As we’ve seen, **they also may be better for sparse collections and collections that grow at arbitrary positions.**
+
+### Dictionary Changes in Python 3.X and 2.7
+
+Dictionaries in Python 3.X:
+* Support a new dictionary comprehension expression, a close cousin to list and set comprehensions
+* Return set-like iterable views instead of lists for the methods `D.keys`, `D.values`, and `D.items`
+* Require new coding styles for scanning by sorted keys, because of the prior point (`list(...)`)
+* No longer support relative magnitude comparisons directly - compare manually instead
+* No longer have the `D.has_key` method—the `in` membership test is used instead
+
+Dictionaries in Python 2.7:
+* Support item1 in the prior list—dictionary comprehensions—as a direct back-port from 3.X
+* Support item 2 in the prior list—set-like iterable views—but do so with special method names `D.viewkeys`, `D.viewvalues`, `D.viewitems`); their nonview methods return lists as before
 
 
+#### Comprehension
+```python
+D = {k: v for (k, v) in zip(['a', 'b', 'c'], [1, 2, 3])}
+
+D = {c.lower(): c + '!' for c in ['SPAM', 'EGGS', 'HAM']}
+
+```
+
+#### Dictionary views
+
+View objects are **iterables**, which simply means objects that **generate result items one at a time**, instead of producing the result list all at once in memory. Besides being iterable, dictionary views also retain the original order of dictionary components, **reflect future changes to the dictionary**, and may **support set operations**. **On the other hand**, because they are not lists, they **do not directly support operations like indexing or the list sort method**, and **do not display their items as a normal list when printed**.
+
+
+> Dictionary views dynamically reflect future changes made to the dictionary after the view object has been created.
+
+
+```python
+D = {'a': 1, 'b': 2, 'c': 3} 
+K = D.keys() 
+V = D.values()
+list(K)			# ['b', 'c', 'a'] 
+list(V)			# [2, 3, 1]del D['b']
+list(K) 		# ['c', 'a'] 
+list(V) 		# [3, 1]
+```
+
+> View objects returned by the `keys` method are set-like and support common set operations such as intersection and union; `values` views are not set-like, but items results are if their (key, value) pairs are unique and hashable (immutable). 
+
+```python
+a = {1: 'g', 2: 'e', 3: 'r', 4: 'r'}
+b = {1: 'fd', 5: 'fdad'}
+a.viewvalues() & b.viewvalues()
+# Traceback (most recent call last):
+#   File "<stdin>", line 1, in <module>
+# TypeError: unsupported operand type(s) for &: 'dict_values' and 'dict_values'
+
+a.viewkeys() & b.viewvalues()		# correct
+a.viewkyes() & b.viewkeys()			# correct
+```
+
+**Items views are set-like too if they are hashable—that is, if they contain only immutable objects.**
+
+#### Sorting dictionary keys
+
+```python
+D = {'a': 1, 'b': 2, 'c': 3}
+Ks = list(D.keys())					# use list to wrap dict.keys method in 3.X
+Ks.sort()							# dictionary views do not have sort method
+for k in Ks: print(k, D[k])
+
+Ks = D.keys()						# or we can use unified sorted method
+for k in sorted(Ks): print(k, D[k])
+
+for k in sorted(D): print(k, D[k])	# or we can sort dictionary directly
+```
+
+#### Dictionary magnitude comparisons no longer work in 3.X
+
+You can simulate it by comparing sorted keys lists manually:
+```python
+sorted(D1.items()) < sorted(D2.items())		# Like 2.X D1 < D2
+```
+
+#### The `has_key` method is dead in 3.X: Use `in` for Unity
+
+```python
+D.has_key('c')			# in 2.X only
+
+'c' in D				# both 2.X and 3.X work
+```
 
