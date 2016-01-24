@@ -186,3 +186,58 @@ json.dump(rec, fp=open('testjson.txt', 'w'), indent=4)
 print(open('testjson.txt').read())
 ```
 
+Note that strings are all Unicode in JSON to support text drawn from international character sets, so you’ll see a leading `u` on strings after translating from JSON data in Python 2.X (but not in 3.X).
+
+For another semirelated tool that deals with formatted data files, see the standard library’s csv module. It parses and creates CSV (comma-separated value) data in files and strings.
+
+```python
+import csv
+rdr = csv.reader(open('csvdata.txt'))
+for row in rdr: print(row)
+...
+# ['a', 'bbb', 'cc', 'dddd']
+# ['11', '22', '33', '44']
+```
+
+### Storing Packed Binary Data: struct
+
+One other file-related note before we move on: some advanced applications also need to deal with packed binary data, created perhaps by a C language program or a network connection. Python’s standard library includes a tool to help in this domain—the `struct` module knows how to both compose and parse packed binary data. In a sense, this is another data-conversion tool that interprets strings in files as binary data.
+
+```python
+F = open('data.bin', 'wb')
+import struct
+data = struct.pack('>i4sh', 7, b'spam', 8)	# b'\x00\x00\x00\x07spam\x00\x08'
+F.write(data)
+F.close()
+```
+
+### File Context Managers
+
+Though more a feature of exception processing than files themselves, it allows us to wrap file-processing code in a logic layer that ensures that the file will be closed (and if needed, have its output flushed to disk) automatically on exit, instead of relying on the auto-close during garbage collection:
+
+```python
+with open(r'C:\code\data.txt') as myfile:
+	for line in myfile:
+		print(line)
+```
+
+The `with` context manager scheme ensures **release of system resources** in all Pythons, and may be more useful for output files to **guarantee buffer flushes**; unlike the more general try, though, it is also limited to objects that support its protocol.
+
+### Other File Tools
+
+* Standard streams
+* Descriptor files in the `os` module
+* Sockets, pipes, and FIFOs
+* Access-by-key files known as ***shelves***
+* Shell command streams
+
+## Core Types Review and Summary
+
+* Objects share operations according to their category;for instance, sequence objects—`strings`, `lists`, and `tuples`—all share sequence operations such as **concatenation, length, and indexing**.
+* Only mutable objects—`lists`, `dictionaries`, and `sets`—may be changed in place; you cannot change `numbers`, `strings`, or `tuples` in place.
+* Files export only methods, so mutability doesn’t really apply to them—their state may be changed when they are processed, but this isn’t quite the same as Python core type mutability constraints.
+* “Numbers”: `integer` (and the distinct long integer in 2.X), `floating point`, `complex`, `decimal`, and `fraction`
+* “Strings”: `str`, as well as `bytes` in 3.X and `unicode` in 2.X; the `bytearray` string type in 3.X, 2.6, and 2.7 is mutable.
+* Sets are something like the keys of a valueless dictionary, but they don’t map to values and are not ordered, so sets are neither a mapping nor a sequence type; `frozenset` is an immutable variant of `set`.
+
+![classification]()
