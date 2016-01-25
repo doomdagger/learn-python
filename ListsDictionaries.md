@@ -63,7 +63,6 @@ can also mimic append with the clever slice assignments of the prior section:
 # equal operations
 L = [1, 2, 3, 4]
 L[len(L):] = [5]    # L.append(5)
-L[-1:] = [5]    # L.append(5)
 L[:0] = [5]         # L.insert(0, 5)
 ```
 
@@ -71,7 +70,14 @@ L[:0] = [5]         # L.insert(0, 5)
 
 ```python
 # default sorts in ascending order 
-L.sort()# use the return value from str.lower as the sorting keyL.sort(key=str.lower)# use the newly defined comparison method for comparison, return 1 ,0 ,-1L.sort(cmp=new_cmp_func)# the reverse argument allows sorts to be made in descending orderL.sort(key=str.lower, reverse=True)
+L.sort()
+# use the return value from str.lower as the sorting key
+L.sort(key=str.lower)
+# use the newly defined comparison method for comparison, return 1 ,0 ,-1
+L.sort(cmp=new_cmp_func)
+# the reverse argument allows sorts to be made in descending order
+L.sort(key=str.lower, reverse=True)
+
 ```
 
 > **Caution:** `[1, 2, 'spam'].sort()` succeeds in Python 2.X but will raise an exception in Python 3.X. Sorting mixed-types fails by proxy.  Really need to consider this when sorting mix-types list.
@@ -152,7 +158,9 @@ zip(L.keys(), L.values())		# list of tuples
 L.items()						# list of tuples
 
 list(table.items())
-# map comprehension[title for (title, year) in table.items() if year == '1975']
+# map comprehension
+[title for (title, year) in table.items() if year == '1975']
+
 ```
 
 ### Dictionary Usage Notes
@@ -163,12 +171,19 @@ list(table.items())
 
 ### Tricks
 
-#### Using dictionaries to simulate flexible lists: Integer keys```python
+#### Using dictionaries to simulate flexible lists: Integer keys
+
+```python
 # Normal List
-L = []L[99] = 'spam'# Traceback (most recent call last):# File "<stdin>", line 1, in ?# IndexError: list assignment index out of range
+L = []
+L[99] = 'spam'
+# Traceback (most recent call last):
+# File "<stdin>", line 1, in ?
+# IndexError: list assignment index out of range
 
 # Dictionary
-D = {}D[99] = 'spam'			# {99: 'spam'}
+D = {}
+D[99] = 'spam'			# {99: 'spam'}
 ```
 
 #### Using dictionaries for sparse data structures: Tuple keys
@@ -177,10 +192,15 @@ for example, multidimensional arrays where only a few positions have values stor
 
 ```python
 # Sparse data structure, multidimensional array
-Matrix = {}Matrix[(2, 3, 4)] = 88Matrix[(7, 8, 9)] = 99X = 2; Y = 3; Z = 4Matrix[(X, Y, Z)] 				# 88
+Matrix = {}
+Matrix[(2, 3, 4)] = 88
+Matrix[(7, 8, 9)] = 99
+X = 2; Y = 3; Z = 4
+Matrix[(X, Y, Z)] 				# 88
 ```
 
 > **Caution**: accessing an empty slot triggers a nonexistent key exception, as these slots are not physically stored. To avoiding missing-key errors, use a **try** statement to catch and recover from the exception explicitly, or simply use the dictionary **get** method shown earlier to provide a default for keys that do not exist.
+
 ```python
 # use if and else
 if (2, 3, 6) in Matrix:
@@ -201,8 +221,12 @@ Matrix.get((2, 3, 4), 0)
 ```python
 # spell out the entire dictionary ahead of time
 {'name': 'Bob', 'age': 40}
-# create the dictionary on the flyD = {}D['name'] = 'Bob' D['age'] = 40
-# use constructors to create dictionariesdict(name='Bob', age=40)dict([('name', 'Bob'), ('age', 40)])
+# create the dictionary on the fly
+D = {}
+D['name'] = 'Bob' D['age'] = 40
+# use constructors to create dictionaries
+dict(name='Bob', age=40)
+dict([('name', 'Bob'), ('age', 40)])
 dict(zip(keyslist, valueslist))
 dict.fromkeys(keyslist, default_value)
 ```
@@ -244,7 +268,8 @@ D = {'a': 1, 'b': 2, 'c': 3}
 K = D.keys() 
 V = D.values()
 list(K)			# ['b', 'c', 'a'] 
-list(V)			# [2, 3, 1]del D['b']
+list(V)			# [2, 3, 1]
+del D['b']
 list(K) 		# ['c', 'a'] 
 list(V) 		# [3, 1]
 ```

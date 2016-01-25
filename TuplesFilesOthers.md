@@ -240,4 +240,118 @@ The `with` context manager scheme ensures **release of system resources** in all
 * “Strings”: `str`, as well as `bytes` in 3.X and `unicode` in 2.X; the `bytearray` string type in 3.X, 2.6, and 2.7 is mutable.
 * Sets are something like the keys of a valueless dictionary, but they don’t map to values and are not ordered, so sets are neither a mapping nor a sequence type; `frozenset` is an immutable variant of `set`.
 
-![classification]()
+![classification](https://raw.githubusercontent.com/doomdagger/learn-python/master/res/Files-1.png)
+
+### References Versus Copies
+
+Assignments always store references to objects, not copies of those objects. Assignments can generate multiple references to the same object, though, it’s important to be aware that changing a mutable object in place may affect other references to the same object elsewhere in your program. If you don’t want such behaviour, you’ll need to tell Python to copy the object explicitly.
+
+This is a feature—you can pass a large object around a program without generating expensive copies of it along the way. If you really do want copies, however, you can request them:
+* Slice expressions with empty limits (`L[:]`) copy sequences.
+* The dictionary, set, and list copy method (`X.copy()`) copies a dictionary, set, or list. (the list’s copy is new as of 3.3).
+* Some built-in functions, such as `list` and `dict` make copies (`list(L)`, `dict(D)`, `set(S)`).
+* The `copy` standard library module makes full copies when needed.### Comparisons, Equality, and Truth
+
+Python comparisons always inspect all parts of compound objects until a result can be determined. In fact, when nested objects are present, Python automatically traverses data structures to apply comparisons from left to right, and as deeply as needed. The first difference found along the way determines the comparison result.
+
+This is sometimes called a recursive comparison.
+
+* **The `==` operator tests value equivalence**
+* **The `is` operator tests object identity.**
+
+As a rule of thumb, the `==` operator is what you will want to use for almost all equality checks; `is` is reserved for highly specialized roles.
+
+> **Caution**: Dictionaries compare as equal if their sorted (key,value) lists are equal. ***Relative magnitude comparisons are not supported for dictionaries in Python 3.X***, but they work in 2.X as though comparing sorted (key, value) lists.
+
+>The alternative in 3.X is to either write loops to compare values by key, or compare the sorted key/value lists manually—the items dictionary methods and sorted built-in suffice:
+```python
+sorted(D1.items()) < sorted(D2.items())
+```
+
+> **Caution**: Nonnumeric mixed-type magnitude comparisons (e.g.,`1<'spam'`) are ***errors*** in Python 3.X. They are allowed in Python 2.X, but use a fixed but arbitrary ordering rule based on type name string. By proxy, this also applies to sorts, which use comparisons internally: nonnumeric mixed-type collections cannot be sorted in 3.X.
+```python
+# error in python 3.X
+11 > '12'		# error
+# both correct in python 3.X and 2.X
+11 == '11'		# False
+```
+
+
+### The Meaning of True and False in Python
+
+* Numbers are false if zero, and true otherwise.
+* Other objects are false if empty, and true otherwise.
+* `None` (serves as an empty placeholder (much like a `NULL` pointer in C)) is false.
+
+#### None
+
+To preallocate a 100-item list such that you can add to any of the 100 offsets, you can fill it with None objects.
+
+
+```python
+L = [None] * 100
+```
+
+Keep in mind that `None` does not mean “undefined.” That is, `None` is something, not nothing (despite its name!)—it is a real object and a real piece of memory that is created and given a built-in name by Python itself.
+
+## Python’s Type Hierarchies
+
+The largest point to notice here is that ***everything*** in a Python system is an object type and may be processed by your Python programs. For instance, you can pass a class to a function, assign it to a variable, stuff it in a list or dictionary, and so on.
+
+![type-hiera](https://raw.githubusercontent.com/doomdagger/learn-python/master/res/Files-2.png)
+
+## Type Objects
+
+One note on type names: as of Python 2.2, each core type has a new built-in name added to support type customization through object-oriented subclassing: `dict`, `list`, `str`, `tuple`, `int`, `float`, `complex`, `bytes`, `type`, `set`, and more. In Python 3.X names all references classes, and in Python 2.X but not 3.X, `file` is also a type name and a synonym for `open`. Calls to these names are really **object constructor calls**, not simply conversion functions, though you can treat them as simple functions for basic usage.
+
+In addition, the `types` standard library module in Python 3.X provides additional type names for types that are not available as built-ins (e.g., the type of a function; in Python 2.X but not 3.X, this module also includes synonyms for built-in type names).
+
+It is possible to do type tests with the `isinstance` function.
+
+```python
+type([1]) == type([])
+isinstance([], list)			# recommended
+
+import types
+def f(): pass
+type(f) == types.FunctionType
+```
+
+### Other Types in Python
+
+The main difference between these extra tools and the built-in types we’ve seen so far is that the built-ins provide special language creation syntax for their objects (e.g., 4 for an integer, [1,2] for a list, the open function for files, and def and lambda for functions). Other tools are generally made available in standard library modules that you must first import to use, and aren’t usually considered core types. For instance, to make a regular expression object, you import `re` and call `re.compile()`.
+
+## Built-in Type Gotchas
+
+* Assignment Creates References, Not Copies
+* Repetition Adds One Level Deep
+
+> **Caution**: For instance, in the following example `X` is assigned to `L` repeated four times, whereas `Y` is assigned to a list containing `L` repeated four times.
+```python
+L = [4, 5, 6]X = L * 4		# like [4, 5, 6] + [4, 5, 6] + ...
+X = [L] * 4	# like [L] + [L] + ... = [L, L, L, L]
+```
+**That is absolutely what we don't want:**
+```python
+L[1] = 0		# impact Y but not X
+X
+# [4, 5, 6, 4, 5, 6, 4, 5, 6, 4, 5, 6]
+Y
+# [[4, 0, 6], [4, 0, 6], [4, 0, 6], [4, 0, 6]] 
+```
+**Try this then:**
+```python
+Y = [list(L)] * 4
+```
+Even more subtly, although `Y` doesn’t share an object with `L` anymore, **it still embeds four references to the same copy of it.**
+```python
+Y = [list(L) for i in range(4)]		# works
+```
+If you remember that **repetition, concatenation, and slicing copy only the top level of their operand objects**, these sorts of cases make much more sense.
+
+* Beware of Cyclic Data Structures
+
+	* Don’t use cyclic references unless you really need to, and make sure you anticipate them in programs that must care. There are good reasons to create cycles, but unless you have code that knows how to handle them, objects that reference themselves may be more surprise than asset.
+
+* Immutable Types Can’t Be Changed in Place
+
