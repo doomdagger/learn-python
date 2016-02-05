@@ -178,3 +178,95 @@ L, M				# ([1, 2, 3, 4], [1, 2, 3, 4])
 * Case matters: `SPAM` is not the same as `spam`
 * Reserved words are off-limits, if you try to use a variable name like class, Python will raise a syntax error
 
+![assignments](https://raw.githubusercontent.com/doomdagger/learn-python/master/res/Assignment-1.png)
+
+This is specific to Python 3.X. **In Python 2.X**, the set of reserved words differs slightly:
+* `print` is a reserved word, because printing is a statement, not a built-in function (more on this later in this chapter).
+* `exec` is a reserved word, because it is a statement, not a built-in function.
+* `nonlocal` is not a reserved word because this statement is not available.
+
+Furthermore, because module names in `import` statements become variables in your scripts, variable name constraints extend to your ***module filenames*** too.
+
+For instance, you can code files called `and.py` and `my-code.py` and **run them as top-level scripts**, but you **cannot import them**: their names without the “.py” extension become variables in your code and so must follow all the variable rules just outlined.
+
+* `and` is reserved
+* `my-code`: dash is invalid
+
+#### Naming conventions
+
+* Names that begin with a single underscore (`_X`) are not imported by a `from module import *` statement.
+* Names that have two leading and trailing underscores (`__X__`) are system-defined names that have special meaning to the interpreter.
+* Names that begin with two underscores and do not end with two more (`__X`) are localized (“mangled”) to enclosing classes
+* The name that is just a single underscore (`_`) retains the result of the last expression **when you are working interactively**.```python
+list(range(3))		# _ retains the result of the last expression
+_					# _ = [0, 1, 2]
+```
+
+> **Cation**: If you’ve used a more restrictive language like C++, you may be interested to know that there is no notion of C++’s `const` declaration in Python; certain objects may be ***immutable***, but names can always be assigned. Python also has ways to hide names in classes and modules, but they’re not the same as C++’s declarations.
+
+## Expression Statements
+
+In Python, you can **use an expression as a statement**, too—that is, on a line by itself. But because the result of the expression won’t be saved, it usually makes sense to do so **only if the expression does something useful as a side effect**. Expressions are commonly used as statements in two situations:
+
+* For calls to functions and methods
+* For printing values at the interactive prompt
+
+### Print in 3.X
+
+```c++
+print([object, ...][, sep=' '][, end='\n'][, file=sys.stdout][, flush=False])
+```
+* `sep` is a string inserted between each object’s text, which defaults to a single space if not passed; passing an empty string suppresses separators altogether.
+* `end` is a string added at the end of the printed text, which defaults to a `\n` newline character if not passed.
+* `file` specifies the file, standard stream, or other file-like object to which the text will be sent; it defaults to the `sys.stdout` standard output stream if not passed. Any object with a file-like `write(string)` method may be passed.
+* `flush`, added in 3.3, defaults to `False`. It allows prints to mandate that their text be flushed through the output stream immediately to any waiting recipients.
+
+### Print in 2.X
+
+Everything we can do with the 3.X print function has a direct translation to the 2.X print statement.
+
+```
+print x, y			# in 2.X
+print(x, y)			# in 3.X
+
+print x, y, 		# in 2.X
+print(x, y, end='')	# in 3.X	suppress '\n' end
+
+print >> afile, x, y	# Send text to 'afile.write', not to sys.stdout.write, in 2.X
+print(x, y, file=afile)	# in 3.X
+```
+
+### Print Stream Redirection
+
+```
+import sys
+# Printing the hard way
+sys.stdout.write('hello world\n')
+
+# equals to ...
+print('hello world')
+
+# redirect stdout
+sys.stdout = open('log.txt', 'a')
+```
+
+### Use 3.X Print in 2.X
+
+```
+from __future__ import print_function
+```
+
+* This statement is simply ignored if it appears in code run by 3.X—it doesn’t hurt if included in 3.X code for 2.X compatibility.
+* This statement must appear at the top of each file that prints in 2.X—because it modifies that parser for a single file only, it’s not enough to import another file that includes this statement.
+
+**Minor difference in 2.X and 3.X**
+```
+print('spam', 'ham', 'eggs')	# in 2.X, prints tuple actually, ('spam', 'ham', 'eggs')
+
+print('')		# prints an empty line in both 2.X and 3.X
+print()			# prints `()` in 2.X and an empty line in 3.X
+```
+
+To be truly portable without enabling 3.X prints everywhere, and to sidestep display difference for nested appearances, you can always format the print string as a single object to unify displays across versions, using the string formatting expression or method call.
+
+If you see extra parentheses in your printed text in 2.X, either drop the parentheses in your print statements, import 3.X prints from the `__future__`, recode your prints using the version-neutral scheme outlined here, or learn to love superfluous text.
