@@ -1,0 +1,255 @@
+# Homework Review (Problems listed)
+
+### old-style class
+```python
+class PyLuaTblParserOld:
+    pass
+
+class PyLuaTblParserNew(object):
+    pass
+    
+>>> class A:
+...     pass
+...
+>>> class B(object):
+...     pass
+...
+>>> a = A()
+>>> b = B()
+>>> type(a)
+<type 'instance'>
+>>> type(b)
+<class '__main__.B'>
+```
+
+### Method access controlling
+
+Only single underscore needed to indicate the visibility of a method.
+
+### Use print to handle exceptions
+
+```python
+try:
+    pass
+except Exception as e:
+    print "..."
+```
+
+### A mass of string splicing & splitting
+
+```python
+s = s1 + s2 + s3
+s = s1; s += s2; s += s3
+s = "".join((s1, s2, s3))
+s = string.join((s1, s2, s3))
+```
+
+# Iterators
+
+```python
+class Foo(object):
+    def __init__(self):
+        self._list = [1, 2, 3, 4]
+        self._curr = 0
+    
+    def __iter__(self):
+        self._curr = 0
+        # return same iterator, error
+        return self
+        
+    def next(self):
+        if self._curr < len(self._list):
+            res = self._list[self._curr]
+            self._curr += 1
+            return res
+        else:
+            raise StopIteration
+
+a = Foo()
+for a1 in a:
+    print a1
+
+
+class FooIterator(object):
+    def __init__(self, csv):
+        self._csv = csv
+        self._curr = 0
+    
+    def next(self):
+        if self._curr < len(self._csv):
+            res = self._csv[self._curr]
+            self._curr += 1
+            return res
+        else:
+            raise StopIteration
+```
+
+#### iterator borrow
+
+```
+class Foo(object):
+    def __init__(self):
+        self._list = [1, 2, 3, 4]
+    
+    def __iter__(self):
+        return iter(self._list)
+```
+
+#### iterator yield
+
+```
+def foo():
+    lst = [1, 2, 3]
+    for v in lst:
+        yield v
+
+g = foo()
+print g.next()
+
+class Foo(object):
+    def __init__(self):
+        self._list = [1, 2, 3, 4]
+    
+    def __iter__(self):
+        for v in self._list:
+            yield v
+```
+
+#### iterator closure
+
+```
+class Foo(object):
+    def __init__(self):
+        self._list = [1, 2, 3, 4]
+    
+    def __iter__(self):
+        counter = 0
+        
+        def get():
+            
+            if counter >= len(self._list):
+                return None
+            res = self._list[counter]
+            counter += 1
+            return res
+```
+
+# Namesapce vs. Object-space
+
+LGB rules
+
+local -> parent local -> ... -> global -> builtin
+
+How to make variable visible to closure
+```python
+class Foo(object):
+    def __init__(self):
+        self._list = [1, 2, 3, 4]
+
+    def __iter__(self):
+        counter = [0]
+
+        def get():
+            global counter
+            if counter[0] >= len(self._list):
+                return None
+            res = self._list[counter[0]]
+            counter[0] += 1
+            return res
+        return iter(get, None)
+```
+
+# Relection
+
+```python
+dir
+
+__dict__ object mapping space (does not include class mapping space)
+
+A.fox = cat
+a1.fox()
+a2.fox()
+
+import new
+a2.fox = new.instancemethod(cat, a2, A)
+
+```
+
+# Object lifecycle
+
+reference count
+* when a new object is created, it's ref count is 0
+* when a name reference an object, it's ref count will be increased by 1
+ 
+* when a name deference an object, it's ref count will be decreased by 1
+ 
+* when an object's ref count decreased to 0, it will be released.
+
+# Mutable vs. immutable
+
+```python
+# don't use mutable object as default params
+def foo(item, items=[], added=True):
+    if added:
+        items.append(item)
+    return items
+```
+
+# == vs. is
+
+Some types, such as str or int, use an object pool to manage some special objects for optimization purpose.
+
+the type NoneType has only one instance - None (use "is" to check None type)
+
+the type bool has only two instance - True/False
+
+# Semantics of import
+
+* Check whether it is in sys.modules. (sys.modules.has_key("m"))
+* Goto 4, when it is true
+* Otherwise, Load the module "m" to create the module object
+* Place a name "m" in the current name-space, and let the name reference the object sys.modules["m"]
+* Open the carrier corresponding to "m" - the carrier is different for difference module type.
+* Create an empty module object named "m" and place it into sys.modules.
+* Execute the satements in the module in sequence within the name-space
+
+```python
+print 't014'
+import t015
+
+print 't015'
+import t016
+a_in_t015 = 10
+
+print 't016'
+import t015
+t015.a_in_t015 = 2
+
+# error!
+```
+
+> Suggestions:
+> * Don't do plenty of work at the name-space of the module
+> * Don't regard the import statement as the #include preprocessing in C/C++
+> * Don't place all the import statement in the front of the modules.
+
+
+```pyhton
+import math
+
+def foo(proccessed):
+    value = math.pi
+    
+    if processed:
+        # Error!
+        import math
+        value = math.sin(value)
+    print value
+
+foo()
+
+```
+
+C/C++ is based upon copy-by-value semantics, while python is based upon reference semantics.
+
+the lifecycle of objects in c/c++ depends on the scope of the object; while lifecyle of objects in python depends on their reference count
